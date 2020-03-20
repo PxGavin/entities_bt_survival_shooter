@@ -1,0 +1,11 @@
+Library
+Logs
+ProjectSettings
+.vs
+Temp
+obj
+Packages/com.unity.entities
+Unity.*
+*.sln
+*.csproj
+.idea
