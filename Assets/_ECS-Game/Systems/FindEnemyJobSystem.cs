@@ -29,7 +29,7 @@ public class FindEnemyJobSystem : JobComponentSystem
             for(int i = 0; i< targetArray.Length; i++)
             {
                 EntityWithPosition targetEntityWithPosition = targetArray[i];
-                if(closestTargetEntity == null)
+                if(closestTargetEntity == Entity.Null)
                 {
                     closestTargetEntity = targetEntityWithPosition.entity;
                     closestTargetPos = targetEntityWithPosition.position;

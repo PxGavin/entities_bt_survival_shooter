@@ -24,25 +24,19 @@ public class FindPlayerJobSystem : JobComponentSystem
         {
             float3 unitPos = translation.Value;
             Entity closestTargetEntity = Entity.Null;
-            float3 closestTargetPos = float3.zero;
 
             for(int i = 0; i< targetArray.Length; i++)
             {
                 EntityWithPosition targetEntityWithPosition = targetArray[i];
-                if(closestTargetEntity == null)
+
+                if (math.distance(unitPos, targetEntityWithPosition.position) < 5)
                 {
                     closestTargetEntity = targetEntityWithPosition.entity;
-                    closestTargetPos = targetEntityWithPosition.position;
                 }
-                else
+                else if(math.distance(unitPos, targetEntityWithPosition.position) > 5)
                 {
-                    if (math.distance(unitPos, targetEntityWithPosition.position) <
-                        math.distance(unitPos, closestTargetPos))
-                    {
-
-                        closestTargetEntity = targetEntityWithPosition.entity;
-                        closestTargetPos = targetEntityWithPosition.position;
-                    }
+                    closestTargetEntity = Entity.Null;
+                    entityCommandBuffer.RemoveComponent(index, entity, typeof(HasTarget));
                 }
             }
 
@@ -50,6 +44,7 @@ public class FindPlayerJobSystem : JobComponentSystem
             {
                 entityCommandBuffer.AddComponent(index, entity, new HasTarget { targetEntity = closestTargetEntity });
             }
+
         }
     }
 
