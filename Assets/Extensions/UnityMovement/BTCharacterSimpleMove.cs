@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using EntitiesBT.Components;
 using EntitiesBT.Core;
@@ -12,8 +13,10 @@ namespace EntitiesBT.Extensions.UnityMovement
     {
         public bool IsLocal;
         
-        [SerializeReference, SerializeReferenceButton]
-        public float3Property VelocityProperty;
+#if ODIN_INSPECTOR
+        [Sirenix.Serialization.OdinSerialize, NonSerialized]
+#endif
+        public VariableProperty<float3> VelocityProperty;
 
         protected override void Build(ref CharacterSimpleMoveNode data, BlobBuilder builder, ITreeNode<INodeDataBuilder>[] tree)
         {
@@ -28,19 +31,18 @@ namespace EntitiesBT.Extensions.UnityMovement
         public bool IsLocal;
         public BlobVariable<float3> Velocity;
 
-        public static IEnumerable<ComponentType> AccessTypes(int index, INodeBlob blob)
-        {
-            yield return ComponentType.ReadWrite<CharacterController>();
-        }
-        
-        public static NodeState Tick(int index, INodeBlob blob, IBlackboard bb)
+        [ReadWrite(typeof(CharacterController))]
+        public NodeState Tick(int index, INodeBlob blob, IBlackboard bb)
         {
             var controller = bb.GetData<CharacterController>();
             if (controller == null) return NodeState.Failure;
-            ref var data = ref blob.GetNodeData<CharacterSimpleMoveNode>(index);
-            Vector3 velocity = data.Velocity.GetData(index, blob, bb);
-            controller.SimpleMove(data.IsLocal ? controller.transform.localToWorldMatrix.MultiplyVector(velocity) : velocity);
+            Vector3 velocity = Velocity.GetData(index, blob, bb);
+            controller.SimpleMove(IsLocal ? controller.transform.localToWorldMatrix.MultiplyVector(velocity) : velocity);
             return NodeState.Success;
+        }
+
+        public void Reset(int index, INodeBlob blob, IBlackboard blackboard)
+        {
         }
     }
 }

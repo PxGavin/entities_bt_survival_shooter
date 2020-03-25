@@ -1,35 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using EntitiesBT.Components;
 using EntitiesBT.Core;
-using EntitiesBT.Components;
 using EntitiesBT.DebugView;
 using EntitiesBT.Entities;
+using System;
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace EntitiesBT.Sample
+namespace EntitiesBT.Game
 {
-    public class EntityMove : BTNode<EntityMoveNode>
+    public struct EntityWithPosition
     {
-        public Vector3 Velocity;
+        public Entity entity;
+        public float3 position;
+    }
 
-        protected override void Build(ref EntityMoveNode data, BlobBuilder _, ITreeNode<INodeDataBuilder>[] __)
+    public class FindEnemey : BTNode<FindEnemeyNode>
+    {
+        public Vector3 Velocity;//赋值 从外面给值
+
+        protected override void Build(ref FindEnemeyNode data, BlobBuilder _, ITreeNode<INodeDataBuilder>[] __)
         {
             data.Velocity = Velocity;
         }
     }
-    
+
     [Serializable]
-    [BehaviorNode("F5C2EE7E-690A-4B5C-9489-FB362C949192")]
-    public struct EntityMoveNode : INodeData
+    [BehaviorNode("F5C2EE7E-690A-4B5C-9489-FB362C949193")]
+    public struct FindEnemeyNode : INodeData
     {
         public float3 Velocity;
 
         [ReadOnly(typeof(BehaviorTreeTickDeltaTime))]
         [ReadWrite(typeof(Translation))]
+        [ReadOnly(typeof(PlayerTag))]
         public NodeState Tick(int index, INodeBlob blob, IBlackboard bb)
         {
             ref var translation = ref bb.GetDataRef<Translation>();
@@ -43,5 +49,5 @@ namespace EntitiesBT.Sample
         }
     }
 
-    public class EntityMoveDebugView : BTDebugView<EntityMoveNode> {}
+    public class EntityMoveDebugView : BTDebugView<FindEnemeyNode> { }
 }
