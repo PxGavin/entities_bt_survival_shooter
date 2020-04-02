@@ -38,8 +38,11 @@ namespace EntitiesBT.Game
             //enemyMovement.nav.destination = target.position;
             //translation.Value = enemyMovement.nav.nextPosition;
 
-            float3 direction = math.normalize(target.position - translation.Value);
-            translation.Value += direction * speed * deltaTime.Value;
+            if(math.distance(target.position,translation.Value) > 2)
+            {
+                float3 direction = math.normalize(target.position - translation.Value);
+                translation.Value += direction * speed * deltaTime.Value;
+            }
 
             return NodeState.Running;
         }

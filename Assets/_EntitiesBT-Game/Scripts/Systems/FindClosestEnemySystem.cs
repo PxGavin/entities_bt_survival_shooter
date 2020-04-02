@@ -69,7 +69,7 @@ public class FindClosestEnemySystem : SystemBase
                 float sqMinDistance = float.MaxValue;
                 foreach (var enemy in enemies)
                 {
-                    if ( math.lengthsq( trans.Value - enemy.position ) < sqMinDistance )
+                    if (math.lengthsq( trans.Value - enemy.position ) < sqMinDistance )
                     {
                         closestEnemy.entity = enemy.entity;
                         closestEnemy.position = enemy.position;

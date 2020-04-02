@@ -47,7 +47,7 @@ namespace EntitiesBT.Game
                 return NodeState.Success;
             }
 
-            return NodeState.Success;
+            return NodeState.Running;
         }
 
         public void Reset(int index, INodeBlob blob, IBlackboard blackboard)
